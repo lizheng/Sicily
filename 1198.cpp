@@ -2,30 +2,55 @@
 #include <stdio.h>
 #include <string.h>
 #include <list>
+#include <assert.h>
 
-//	新建队列
-//	指针指向队头
-//	
-//	队头展开成各种情况，队头出队
-//	选取可能的情况
-//	与队中剩余情况比较，剪枝，入队
-//	直到队中元素不能再展开
-//	
-//	此时队中最优就是所求
+// do more
 
 using namespace std;
 
-string LexicographicallySmallest( string* s, int size ){
+string LexicographicallySmallest( list<string> remainder ){
 	string result="****";
-	pair<string, long> * ss;
+
+	assert(remainder.size()!=0);
 	
-	list< pair<string, long> > worklist;
-	list< pair<string, long> > waiting;
+	if (remainder.size() == 1) {
+		return *remainder.begin();
+	}
+
+
+	list<string> LSstrings;
+	string temp;
 	
-	ss = make_pair("",0);
-	waiting = sonString(ss);
+	list<string>::iterator it;
+	for (it=remainder.begin(); it!=remainder.end(); it++) {
+		list<string> r;
+		
+		r = remainder;
+		
+//		r.remove(*it);
+		
+		list<string>::iterator it2;
+		for (it2=r.begin(); it2!=r.end(); it2++){
+			if ( (*it2) == (*it) ){
+//				printf("hahaff\n");
+					r.erase(it2);
+					break;
+			}
+		}
+		
+//		removeOnes(r,(*it));
+		// !!!!!!
+		string temp = "";
+		temp += (*it);
+		temp += LexicographicallySmallest(r);
+		LSstrings.push_back( temp );
+		
+//		r.erase(it);
+		
+	}
 	
-	
+	LSstrings.sort();
+	result = *LSstrings.begin();
 	
 	return result;
 };
@@ -41,20 +66,26 @@ int main(int argc, char *argv[]) {
 		int NumInput=-1;
 		scanf("%d",&NumInput);
 		
-		string s[NumInput];
-//		char** s_ptr = s;
+		string temp;
+		list<string> s;
 		
 		int InputIndex;
 		for (InputIndex=0; InputIndex<NumInput; InputIndex++) {
-			cin >> s[InputIndex];
-//			cout << s[InputIndex] << endl;
-//			scanf("%s",s[InputIndex]);
-//			printf("%s",s[InputIndex]);
+			cin >> temp;
+			s.push_back(temp);
 		}
 		
+//		cout << "list:" << endl;
+//		list<string>::iterator it;
+//		for (it=s.begin(); it!=s.end(); it++) {
+//			cout << (*it) << "\t";
+//		}
+//		cout << endl;
+		
+		
 		string result = "----";
-		result = LexicographicallySmallest(s, NumInput);
+		result = LexicographicallySmallest(s);
 		cout << result << endl;
-//		printf("%s", result);
+
 	}
 }
