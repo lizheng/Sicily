@@ -13,7 +13,7 @@ struct node{
 };
 
 void preorder(struct node* nodes, struct node n){
-//	cout << "pre-order node NO." << n.ID << endl;
+//	cout << "pre-order node NO." << n.ID <c< endl;
 	
 	cout << n.c;
 	if (n.l != 0) {
